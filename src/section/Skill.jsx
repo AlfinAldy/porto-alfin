@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 
 const skills = [
-    { name: 'HTML', icon: '/src/assets/html.svg' },
-    { name: 'CSS', icon: '/src/assets/css.svg' },
-    { name: 'JavaScript', icon: '/src/assets/javascript.svg' },
-    { name: 'React', icon: '/src/assets/react.svg' },
-    { name: 'Next.js', icon: '/src/assets/next-js.svg' },
-    { name: 'PHP', icon: '/src/assets/php.svg' },
-    { name: 'Laravel', icon: '/src/assets/laravel.svg' },
-    { name: 'Python', icon: '/src/assets/python.svg' },
-    { name: 'C#', icon: '/src/assets/c-sharp.svg' },
-    { name: 'MySQL', icon: '/src/assets/mysql.png' },
-    { name: 'Unity', icon: '/src/assets/unity.svg' },
-    { name: 'Adobe Illustrator', icon: '/src/assets/adobe-ilustrator.svg' },
-    { name: 'CorelDRAW', icon: '/src/assets/crel-draw.svg' },
-    { name: 'Construct 3', icon: '/src/assets/construct-3.png' },
-    { name: 'GitHub', icon: '/src/assets/github.svg' },
+    { name: 'HTML', icon: '/html.svg' },
+    { name: 'CSS', icon: '/css.svg' },
+    { name: 'JavaScript', icon: '/javascript.svg' },
+    { name: 'React', icon: '/react.svg' },
+    { name: 'Next.js', icon: '/next-js.svg' },
+    { name: 'PHP', icon: '/php.svg' },
+    { name: 'Laravel', icon: '/laravel.svg' },
+    { name: 'Python', icon: '/python.svg' },
+    { name: 'C#', icon: '/c-sharp.svg' },
+    { name: 'MySQL', icon: '/mysql.png' },
+    { name: 'Unity', icon: '/unity.svg' },
+    { name: 'Adobe Illustrator', icon: '/adobe-ilustrator.svg' },
+    { name: 'CorelDRAW', icon: '/crel-draw.svg' },
+    { name: 'Construct 3', icon: '/construct-3.png' },
+    { name: 'GitHub', icon: '/github.svg' },
 ];
 
 export const Skill = () => {
