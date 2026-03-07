@@ -7,26 +7,23 @@ import {About} from './section/About';
 import {Skill} from './section/Skill';
 import {Footer} from './layout/Footer';
 import {Background} from './components/Background';
-import {ScrollSmoother} from './components/ScrollSmoother';
 
 function App() {
   return (
     <>
       <Navbar />
-      <ScrollSmoother speed={1}>
-        <Background />
-        <div className="min-h-screen">
-          <main>
-            <Hero />
-            <About />
-            <Skill />
-            <Project />
-            <Experience />
-            <Contact />
-          </main>
-          <Footer />
-        </div>
-      </ScrollSmoother>
+      <Background />
+      <div className="min-h-screen">
+        <main>
+          <Hero />
+          <About />
+          <Skill />
+          <Project />
+          <Experience />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
     </>
   )
 }

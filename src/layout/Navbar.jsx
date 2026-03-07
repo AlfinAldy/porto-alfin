@@ -21,6 +21,14 @@ export const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const scrollToSection = (href) => {
+        const element = document.querySelector(href);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+        setIsMobileMenuOpen(false);
+    };
+
     return (
         <header 
             ref={navRef}
@@ -30,7 +38,7 @@ export const Navbar = () => {
         >
             <nav className="container-custom flex items-center justify-between px-4">
                 {/* Logo */}
-                <a href="#" className="text-2xl font-bold font-serif group">
+                <a href="#" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-2xl font-bold font-serif group cursor-pointer">
                     <span className="text-secondary-foreground transition-transform duration-300 group-hover:scale-110 inline-block">M.</span>
                     <span className="text-forgeround group-hover:text-secondary-foreground transition-colors duration-300">Alfin</span>
                 </a>
@@ -38,9 +46,9 @@ export const Navbar = () => {
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex items-center gap-1">
                     {navLinks.map((link, index) => (
-                        <a 
+                        <button 
                             key={link.href}
-                            href={link.href}
+                            onClick={() => scrollToSection(link.href)}
                             className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-secondary-foreground transition-colors duration-300 group"
                             style={{
                                 transitionDelay: `${index * 50}ms`
@@ -49,7 +57,7 @@ export const Navbar = () => {
                             <span className="relative z-10">{link.label}</span>
                             <span className="absolute inset-0 bg-secondary-foreground/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></span>
                             <span className="absolute -bottom-1 left-1/2 w-0 h-0.5 bg-secondary-foreground transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
-                        </a>
+                        </button>
                     ))}
                 </div>
 
@@ -73,17 +81,16 @@ export const Navbar = () => {
             <div className={`md:hidden glass transition-all duration-300 overflow-hidden ${isMobileMenuOpen ? 'max-h-64' : 'max-h-0'}`}>
                 <div className="flex flex-col items-center gap-2 py-6 px-4">
                     {navLinks.map((link, index) => (
-                        <a 
+                        <button 
                             key={link.href}
-                            href={link.href}
+                            onClick={() => scrollToSection(link.href)}
                             className="text-muted-foreground hover:text-secondary-foreground transition-colors duration-300 text-lg font-medium py-2"
                             style={{
                                 transitionDelay: `${index * 50}ms`
                             }}
-                            onClick={() => setIsMobileMenuOpen(false)}
                         >
                             {link.label}
-                        </a>
+                        </button>
                     ))}
                 </div>
             </div>

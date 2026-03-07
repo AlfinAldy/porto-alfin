@@ -46,8 +46,8 @@ export const Hero = () => {
                     <div className="relative inline-block">
                         <div className="w-40 h-40 md:w-48 md:h-48 mx-auto rounded-full overflow-hidden border-4 border-secondary-foreground/30 shadow-lg animate-pulse-glow">
                             <img 
-                                src="YOUR_PHOTO_HREF_HERE" 
-                                alt="Putra Manggala" 
+                                src="/alfin.jpg" 
+                                alt="Alfin's Profile" 
                                 className="w-full h-full object-cover"
                             />
                         </div>
