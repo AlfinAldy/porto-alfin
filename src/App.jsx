@@ -12,10 +12,10 @@ import {ScrollSmoother} from './components/ScrollSmoother';
 function App() {
   return (
     <>
+      <Navbar />
       <ScrollSmoother speed={1}>
         <Background />
         <div className="min-h-screen">
-          <Navbar />
           <main>
             <Hero />
             <About />

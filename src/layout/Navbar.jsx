@@ -11,13 +11,9 @@ const navLinks = [
 export const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isVisible, setIsVisible] = useState(false);
     const navRef = useRef(null);
 
     useEffect(() => {
-        // Trigger entrance animation after mount
-        setTimeout(() => setIsVisible(true), 100);
-
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 50);
         };
@@ -28,9 +24,9 @@ export const Navbar = () => {
     return (
         <header 
             ref={navRef}
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-                isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
-            } ${isScrolled ? 'glass py-3' : 'py-5'}`}
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+                isScrolled ? 'glass py-3' : 'py-5'
+            }`}
         >
             <nav className="container-custom flex items-center justify-between px-4">
                 {/* Logo */}
