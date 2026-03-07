@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Hide default cursor when custom cursor is active */
+body.hide-default-cursor {
+  cursor: none !important;
+}
+
+body.hide-default-cursor * {
+  cursor: none !important;
+}
+
 @theme {
   --color-background: #0f1418;
   --color-forgeround: #f0f2f5;
