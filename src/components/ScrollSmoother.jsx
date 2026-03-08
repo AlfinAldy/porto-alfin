@@ -1,134 +1,69 @@
 import { useEffect, useRef, useCallback } from 'react';
-import gsap from 'gsap';
+import Lenis from 'lenis';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import gsap from 'gsap';
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
 export const ScrollSmoother = ({ children, speed = 1 }) => {
-    const containerRef = useRef(null);
-    const wrapperRef = useRef(null);
-    const contentRef = useRef(null);
-    const scrollVelocity = useRef(0);
-    const lastScrollTop = useRef(0);
-    const ticking = useRef(false);
-    const animationRef = useRef(null);
-
-    // Calculate scroll velocity
-    const updateVelocity = useCallback(() => {
-        const currentScrollTop = window.scrollY || window.pageYOffset;
-        const delta = currentScrollTop - lastScrollTop.current;
-        
-        // Smooth velocity calculation
-        scrollVelocity.current = scrollVelocity.current * 0.8 + Math.abs(delta) * 0.2;
-        
-        lastScrollTop.current = currentScrollTop;
-        ticking.current = false;
-    }, []);
-
-    const onScroll = useCallback(() => {
-        if (!ticking.current) {
-            window.requestAnimationFrame(updateVelocity);
-            ticking.current = true;
-        }
-    }, [updateVelocity]);
+    const lenisRef = useRef(null);
 
     useEffect(() => {
-        const container = containerRef.current;
-        const wrapper = wrapperRef.current;
-        const content = contentRef.current;
+        // Initialize Lenis for smooth scrolling
+        const lenis = new Lenis({
+            duration: speed * 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 2,
+            infinite: false,
+        });
 
-        if (!container || !wrapper || !content) return;
+        lenisRef.current = lenis;
 
-        // Wait for fonts and images to load
-        const timer = setTimeout(() => {
-            // Set initial heights
-            const documentHeight = document.documentElement.scrollHeight;
-            
-            wrapper.style.height = `${documentHeight}px`;
-            content.style.position = 'fixed';
-            content.style.top = '0';
-            content.style.left = '0';
-            content.style.width = '100%';
-            content.style.height = '100%';
+        // Integrate Lenis with GSAP ScrollTrigger
+        lenis.on('scroll', ScrollTrigger.update);
 
-            // Create smooth scroll effect using GSAP
-            const scrollAmount = { value: 0 };
-            
-            // Custom smooth scroll animation
-            const animate = () => {
-                const targetScroll = window.scrollY;
-                
-                // Kill previous animation if exists
-                if (animationRef.current) {
-                    animationRef.current.kill();
-                }
-                
-                // Create new smooth animation
-                animationRef.current = gsap.to(scrollAmount, {
-                    value: targetScroll,
-                    duration: speed,
-                    ease: 'power2.out',
-                    onUpdate: () => {
-                        // Move content based on scroll position
-                        const yPos = -scrollAmount.value;
-                        content.style.transform = `translateY(${yPos}px)`;
-                    }
-                });
-                
-                // Request next frame
-                animationRef.current.requestAnimationFrameId = requestAnimationFrame(animate);
-            };
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
 
-            // Start animation loop
-            animate();
+        gsap.ticker.lagSmoothing(0);
 
-            // Handle scroll with native scroll + GSAP smoothing
-            window.addEventListener('scroll', onScroll, { passive: true });
-
-            // Create scroll trigger for animations
-            ScrollTrigger.refresh();
-
-            // Cleanup
-            return () => {
-                window.removeEventListener('scroll', onScroll);
-                if (animationRef.current) {
-                    animationRef.current.kill();
-                    if (animationRef.current.requestAnimationFrameId) {
-                        cancelAnimationFrame(animationRef.current.requestAnimationFrameId);
-                    }
-                }
-                ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-                clearTimeout(timer);
-            };
-        }, 100);
+        // Refresh ScrollTrigger after init
+        ScrollTrigger.refresh();
 
         return () => {
-            window.removeEventListener('scroll', onScroll);
-            if (animationRef.current) {
-                animationRef.current.kill();
-            }
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-            clearTimeout(timer);
+            lenis.destroy();
+            gsap.ticker.remove((time) => {
+                lenis.raf(time * 1000);
+            });
         };
-    }, [speed, onScroll]);
+    }, [speed]);
 
     // Expose scroll velocity for other components
     useEffect(() => {
-        window.__scrollVelocity = scrollVelocity;
+        const getVelocity = () => lenisRef.current?.velocity || 0;
+        window.__scrollVelocity = { current: 0 };
         
+        const interval = setInterval(() => {
+            if (lenisRef.current) {
+                window.__scrollVelocity.current = lenisRef.current.velocity || 0;
+            }
+        }, 100);
+
         return () => {
+            clearInterval(interval);
             delete window.__scrollVelocity;
         };
     }, []);
 
     return (
-        <div ref={containerRef} className="scroll-smoother-container">
-            <div ref={wrapperRef} className="scroll-smoother-wrapper">
-                <div ref={contentRef} className="scroll-smoother-content">
-                    {children}
-                </div>
-            </div>
+        <div className="scroll-smoother-container">
+            {children}
         </div>
     );
 };
